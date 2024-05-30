@@ -92,7 +92,7 @@ class Statistics:
     Provides statistical analysis on school data.
     """
     @staticmethod
-    def school_enrol_grade_means(school_data):
+    def school_enrol_means_per_grade(school_data):
         """
         Calculates the mean enrollment for each grade (grade 10, grade 11, and grade 12) in a school.
 
@@ -117,7 +117,7 @@ class Statistics:
         return highest_enrollment, lowest_enrollment
 
     @staticmethod
-    def school_enrol_tot_per_year(school_data):
+    def school_tot_enrol_per_year(school_data):
         """
         Calculates the total enrollment for each year in a school.
 
@@ -127,34 +127,37 @@ class Statistics:
         return np.sum(school_data, axis=1)
 
     @staticmethod
-    def school_tot_ten_year(school_data):
+    def school_tot_enrol(school_data):
         """
-        Calculates the total enrollment over a ten-year period for a specific school.
+        Calculates the total enrollment over the ten-year period for a specific school.
         
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @return scalar: total enrollment over 10 years.
         """
-        return np.sum(Statistics.school_enrol_tot_per_year(school_data))
+        return np.sum(Statistics.school_tot_enrol_per_year(school_data))
 
     @staticmethod
-    def mean_tot_enrol(school_data):
+    def school_mean_tot_enrol(school_data):
         """
-        Calculates the mean total enrollment for a specific school over a ten-year period.
+        Calculates the mean total enrollment for a specific school over the ten-year period.
 
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @return scalar: The mean total enrollment over 10 years.
         """
-        return np.mean(Statistics.school_enrol_tot_per_year(school_data))
+        return np.mean(Statistics.school_tot_enrol_per_year(school_data))
 
     @staticmethod
-    def median_over_500(school_data):
+    def school_median_over_500(school_data):
         """
-        Calculates the median of enrollments that are greater than 500.
+        Calculates the median of enrollments that are greater than 500 if any.
 
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
-        @return scalar: The median of enrollments that are greater than 500.
+        @return scalar: if theres any value above 500, the median of enrollments for those. Else, returns 0.
         """
-        return np.median(school_data[school_data > 500])
+        if ((school_data > 500).any()):
+            return np.median(school_data[school_data > 500])
+        else:
+            return 0
 
     @staticmethod
     def print_school_stats(school_data):
@@ -163,21 +166,27 @@ class Statistics:
 
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @print Mean enrollment for grade 10, grade 11, and grade 12, Highest and lowest enrollment for a single grade, 
-        Total enrollment for each year, Total ten year enrollment, Mean total enrollment, Median enrollment over 500.
+        Total enrollment for each year, Total ten year enrollment, Mean total enrollment, Median enrollment over 500 if any value > 500.
         """
-        mean_grades = Statistics.school_enrol_grade_means(school_data)
+        mean_grades = Statistics.school_enrol_means_per_grade(school_data)
         print(f"Mean enrollment for grade 10: {mean_grades[0]:.0f}\nMean enrollment for grade 11: {mean_grades[1]:.0f}\nMean enrollment for grade 12: {mean_grades[2]:.0f}")
 
         max_min_enroll = Statistics.school_enrol_max_min(school_data)
         print(f"Highest enrollment for a single grade: {max_min_enroll[0]:.0f}\nLowest enrollment for a single grade: {max_min_enroll[1]:.0f}")
 
-        total_enrollment_per_year = Statistics.school_enrol_tot_per_year(school_data)
+        total_enrollment_per_year = Statistics.school_tot_enrol_per_year(school_data)
         for year, total in zip(range(2013, 2023), total_enrollment_per_year):
             print(f"Total enrollment in {year}: {total:.0f}")
 
-        print(f"Total ten year enrollment: {Statistics.school_tot_ten_year(school_data):.0f}")
-        print(f"Mean total enrollment over 10 years: {Statistics.mean_tot_enrol(school_data):.0f}")
-        print(f"For all enrollments over 500, the median value was: {Statistics.median_over_500(school_data):.0f}")
+        print(f"Total ten year enrollment: {Statistics.school_tot_enrol(school_data):.0f}")
+        print(f"Mean total enrollment over 10 years: {Statistics.school_mean_tot_enrol(school_data):.0f}")
+
+        # Method school_median_over_500 returns median for values over 500 or 0 if there is none. So we account for that here.
+        median_over_500 = Statistics.school_median_over_500(school_data)
+        if (median_over_500 > 0):
+            print(f"For all enrollments over 500, the median value was: {Statistics.school_median_over_500(school_data):.0f}")
+        elif (median_over_500 == 0 ):
+            print("No enrollments greater than 500")
 
     @staticmethod
     def general_stats(data_obj):
