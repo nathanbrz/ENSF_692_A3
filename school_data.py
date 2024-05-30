@@ -149,7 +149,7 @@ class Statistics:
     @staticmethod
     def school_median_over_500(school_data):
         """
-        Calculates the median of enrollments that are greater than 500 if any.
+        Calculates the median of enrollments for all values that are greater than 500 if any. Else, it just returns 0.
 
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @return scalar: if theres any value above 500, the median of enrollments for those. Else, returns 0.
@@ -207,7 +207,7 @@ class Statistics:
         print(f"Mean enrollment in 2022: {mean_2022:.0f}")
         print(f"Total graduating class of 2022: {total_grad_2022:.0f}")
         print(f"Highest enrollment for a single grade: {max_enrol_grade:.0f}")
-        print(f"Lowest enrollment for a single grade: {min_enrol_grade:.0f}")
+        print(f"Lowest enrollment for a single grade: {min_enrol_grade:.0f}\n")
 
 def input_handler_for_part2(data_obj, user_input):
     """
@@ -237,7 +237,7 @@ def main():
     # Make while loop so that program runs despite the errors or end of code, until user says so.
     while (True):
         try:
-            print("ENSF 692 School Enrollment Statistics")
+            print(f"\nENSF 692 School Enrollment Statistics")
 
             # Print Stage 1 requirements here
 
