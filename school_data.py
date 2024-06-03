@@ -99,9 +99,9 @@ class Statistics:
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @return tuple: A tuple containing the mean enrollment for grade 10, grade 11, and grade 12 respectively.
         """
-        mean_grade_10 = np.mean(school_data[:, 0])
-        mean_grade_11 = np.mean(school_data[:, 1])
-        mean_grade_12 = np.mean(school_data[:, 2])
+        mean_grade_10 = np.nanmean(school_data[:, 0])
+        mean_grade_11 = np.nanmean(school_data[:, 1])
+        mean_grade_12 = np.nanmean(school_data[:, 2])
         return mean_grade_10, mean_grade_11, mean_grade_12
 
     @staticmethod
@@ -112,8 +112,8 @@ class Statistics:
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @return tuple: Maximum and minimum enrollments.
         """
-        highest_enrollment = np.max(school_data)
-        lowest_enrollment = np.min(school_data)
+        highest_enrollment = np.nanmax(school_data)
+        lowest_enrollment = np.nanmin(school_data)
         return highest_enrollment, lowest_enrollment
 
     @staticmethod
@@ -124,7 +124,7 @@ class Statistics:
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @return scalar: the total enrollment for each year.
         """
-        return np.sum(school_data, axis=1)
+        return np.nansum(school_data, axis=1)
 
     @staticmethod
     def school_tot_enrol(school_data):
@@ -134,7 +134,7 @@ class Statistics:
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @return scalar: total enrollment over 10 years.
         """
-        return np.sum(Statistics.school_tot_enrol_per_year(school_data))
+        return np.nansum(Statistics.school_tot_enrol_per_year(school_data))
 
     @staticmethod
     def school_mean_tot_enrol(school_data):
@@ -144,7 +144,7 @@ class Statistics:
         @param school_data (numpy.ndarray): The 2D data array for a specific school over the years wwith each grade. Shape (years, one school, grades).
         @return scalar: The mean total enrollment over 10 years.
         """
-        return np.mean(Statistics.school_tot_enrol_per_year(school_data))
+        return np.nanmean(Statistics.school_tot_enrol_per_year(school_data))
 
     @staticmethod
     def school_median_over_500(school_data):
@@ -155,7 +155,7 @@ class Statistics:
         @return scalar: if theres any value above 500, the median of enrollments for those. Else, returns 0.
         """
         if ((school_data > 500).any()):
-            return np.median(school_data[school_data > 500])
+            return np.nanmedian(school_data[school_data > 500])
         else:
             return 0
 
